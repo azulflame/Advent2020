@@ -1,6 +1,6 @@
 package me.toddbensmiller.advent
 
-import java.lang.Math.pow
+import kotlin.math.pow
 import kotlin.system.measureNanoTime
 
 /*
@@ -42,7 +42,7 @@ fun getSeatId(s: String): Int
 	{
 		if(s[x] == 'B')
 		{
-			row += pow(2.0,6.0-x).toInt()
+			row += 2.0.pow(6.0 - x).toInt()
 		}
 	}
 	var col = 0
@@ -50,7 +50,7 @@ fun getSeatId(s: String): Int
 	{
 		if(s[x] == 'R')
 		{
-			col += pow(2.0,9.0-x).toInt()
+			col += 2.0.pow(9.0 - x).toInt()
 		}
 	}
 	return row*8+col
