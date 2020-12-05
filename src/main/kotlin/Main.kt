@@ -64,7 +64,7 @@ fun runAll(warmup: Int, runs: Int, hideAnswers: Boolean) {
         println("Day ${i + 1}")
 	    if(hideAnswers)
 	    {
-	    	printMsNoAnswers(averageList[i], maxa, maxtms)
+	    	printMsNoAnswers(averageList[i], maxtms)
 	    }
 	    else
 	    {
@@ -73,7 +73,7 @@ fun runAll(warmup: Int, runs: Int, hideAnswers: Boolean) {
     }
 }
 
-fun printMsNoAnswers(day: Pair<BigDecimal, BigDecimal>, maxa: Int, maxtms: Int)
+fun printMsNoAnswers(day: Pair<BigDecimal, BigDecimal>, maxtms: Int)
 {
 	println(
 		"\tPart 1: ${

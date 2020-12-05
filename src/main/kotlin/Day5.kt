@@ -1,6 +1,5 @@
 package me.toddbensmiller.advent
 
-import java.lang.Math.max
 import java.lang.Math.pow
 import kotlin.system.measureNanoTime
 
