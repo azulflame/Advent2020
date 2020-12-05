@@ -29,7 +29,7 @@ fun day3part1(list: List<String>): Int {
 }
 
 fun day3part2(list: List<String>): Long {
-    val slopes: Array<Pair<Int, Int>> = arrayOf(Pair(1, 1), Pair(3, 1), Pair(5, 1), Pair(7, 1), Pair(1, 2))
+    val slopes: Array<Pair<Int, Int>> by lazy { arrayOf(Pair(1, 1), Pair(3, 1), Pair(5, 1), Pair(7, 1), Pair(1, 2))}
     var total = 1L
     val width = list[0].length
     slopes.forEach { slope ->
