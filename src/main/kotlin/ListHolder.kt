@@ -6,6 +6,7 @@ import java.io.File
  * Created by Todd on 12/3/2020.
  */
 object ListHolder {
+	val test: List<String> by lazy { File("src/main/resources/test.txt").readLines() }
 	val day1: List<String> by lazy { File("src/main/resources/day1.txt").readLines() }
 	val day2: List<String> by lazy { File("src/main/resources/day2.txt").readLines() }
 	val day3: List<String> by lazy { File("src/main/resources/day3.txt").readLines() }
