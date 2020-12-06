@@ -7,7 +7,7 @@ import kotlin.math.max
 
 fun main(args: Array<String>) {
 	val hideAnswers: Boolean =  args.isNotEmpty() && args[0] == "--hide-answers"
-	runAll(250, 1000, hideAnswers)
+	runAll(1, 1, hideAnswers)
 }
 
 fun runOnce(): List<Pair<Pair<String, Long>, Pair<String, Long>>> {
