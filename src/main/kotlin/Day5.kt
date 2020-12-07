@@ -8,13 +8,9 @@ import kotlin.system.measureNanoTime
  */
 
 
-fun day5(): Pair<Pair<String, Long>, Pair<String, Long>>
+fun day5(): Pair<Long, Long>
 {
-	val p1a: Long
-	val p2a: Long
-	val p1t = measureNanoTime { p1a = day5part1(ListHolder.day5) }
-	val p2t = measureNanoTime { p2a = day5part2(ListHolder.day5) }
-	return Pair(Pair(p1a.toString(), p1t), Pair(p2a.toString(), p2t))
+	return Pair(day5part1(ListHolder.day5), day5part2(ListHolder.day5))
 }
 
 fun day5part1(list: List<String>): Long

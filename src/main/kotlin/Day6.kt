@@ -7,13 +7,9 @@ import kotlin.system.measureNanoTime
  */
 
 
-fun day6(): Pair<Pair<String, Long>, Pair<String, Long>>
+fun day6(): Pair<Long, Long>
 {
-	val p1a: Long
-	val p2a: Long
-	val p1t = measureNanoTime { p1a = day6part1(ListHolder.day6)}
-	val p2t = measureNanoTime { p2a = day6part2(ListHolder.day6) }
-	return Pair(Pair(p1a.toString(), p1t), Pair(p2a.toString(), p2t))
+	return Pair(day6part1(ListHolder.day6), day6part2(ListHolder.day6))
 }
 
 fun day6part1(list: List<String>): Long
@@ -35,7 +31,7 @@ fun day6part1(list: List<String>): Long
 	total += questionMap.count()
 	return total.toLong()
 }
-
+// for anyone noticing my performance change, I stopped caring about performance around here
 fun day6part2(list: List<String>): Long
 {
 	val allLowerChars by lazy { ('a'..'z').toHashSet()}
