@@ -1,13 +1,11 @@
 package me.toddbensmiller.advent
 
-import kotlin.system.measureNanoTime
-
 /*
  * Created by Todd on 12/3/2020.
  */
 fun day4(): Pair<Long, Long>
 {
-	return Pair(day4part1(ListHolder.day4),day4part2(ListHolder.day4))
+	return Pair(day4part1(ListHolder.day4), day4part2(ListHolder.day4))
 }
 
 fun day4part1(list: List<String>): Long
@@ -137,8 +135,7 @@ fun day4part2(list: List<String>): Long
 				)
 				{
 					hgt = true
-				}
-				else continue
+				} else continue
 			}
 			if (hclP.containsMatchIn(line))
 			{

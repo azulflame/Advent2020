@@ -1,7 +1,5 @@
 package me.toddbensmiller.advent
 
-import kotlin.system.measureNanoTime
-
 /*
  * Created by Todd on 12/5/2020.
  */
@@ -16,14 +14,14 @@ fun day6part1(list: List<String>): Long
 {
 	var total = 0
 	val questionMap = HashSet<Char>()
-	for(line in list)
+	for (line in list)
 	{
-		if(line.isBlank())
+		if (line.isBlank())
 		{
 			total += questionMap.count()
 			questionMap.clear()
 		}
-		for(ch in line)
+		for (ch in line)
 		{
 			questionMap.add(ch)
 		}
@@ -31,22 +29,22 @@ fun day6part1(list: List<String>): Long
 	total += questionMap.count()
 	return total.toLong()
 }
+
 // for anyone noticing my performance change, I stopped caring about performance around here
 fun day6part2(list: List<String>): Long
 {
-	val allLowerChars by lazy { ('a'..'z').toHashSet()}
+	val allLowerChars by lazy { ('a'..'z').toHashSet() }
 	var groupCommon = HashSet<Char>(allLowerChars)
 	var total = 0
-	for(line in list)
+	for (line in list)
 	{
-		if(line.isBlank())
+		if (line.isBlank())
 		{
 			total += groupCommon.count()
 			groupCommon = allLowerChars
-		}
-		else
+		} else
 		{
-			for(ch in line)
+			for (ch in line)
 			{
 				groupCommon = groupCommon.intersect(line.toCharArray().toHashSet()).toHashSet()
 			}
