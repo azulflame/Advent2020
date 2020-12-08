@@ -11,7 +11,7 @@ fun day8(): Pair<Number, Number>
 fun day8part1(list: List<String>): Number
 {
 	val inputMap = list.map { a ->
-		a.split(" ")[0] to mapOf('-' to -1, '+' to 1).getOrDefault(a.split(" ")[1][0], 0) * a.split(' ')[1].drop(1)
+		a.split(" ")[0] to mapOf('-' to -1, '+' to 1)[a.split(" ")[1][0]]!! * a.split(' ')[1].drop(1)
 			.toInt()
 	}
 	return getAcc(inputMap)
@@ -25,18 +25,13 @@ fun day8part2(list: List<String>): Number
 	}
 	for (x in inputMap.indices)
 	{
-		if (inputMap[x].first == "nop" || inputMap[x].first == "jmp")
+		if (doesHalt(flipIndex(inputMap, x)))
 		{
-			val testMap = flipIndex(inputMap, x)
-			if (doesHalt(testMap))
-			{
-				return getAcc(testMap)
-			}
+			return getAcc(flipIndex(inputMap, x))
 		}
 	}
 	return 0
 }
-
 
 fun getAcc(inputMap: List<Pair<String, Int>>): Int
 {
