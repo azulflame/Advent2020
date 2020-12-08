@@ -20,64 +20,20 @@ fun day8part1(list: List<String>): Number
 fun day8part2(list: List<String>): Number
 {
 	val inputMap = list.map { a ->
-		a.split(" ")[0] to mapOf('-' to -1, '+' to 1).getOrDefault(a.split(" ")[1][0], 0) * a.split(' ')[1].drop(1)
+		a.split(" ")[0] to mapOf('-' to -1, '+' to 1)[a.split(" ")[1][0]]!! * a.split(' ')[1].drop(1)
 			.toInt()
 	}
-	// test for nops that should be jumps
 	for (x in inputMap.indices)
 	{
-		if (inputMap[x].first == "nop")
+		if (inputMap[x].first == "nop" || inputMap[x].first == "jmp")
 		{
-			val before: List<Pair<String, Int>> = if (x > 0)
-			{
-				inputMap.subList(0, x)
-			} else
-			{
-				listOf()
-			}
-			val after: List<Pair<String, Int>> = if (x < inputMap.size)
-			{
-				inputMap.subList(x + 1, inputMap.size)
-			} else
-			{
-				listOf()
-			}
-			val testMap = before.plus(Pair("jmp", inputMap[x].second))
-				.plus(after)
+			val testMap = flipIndex(inputMap, x)
 			if (doesHalt(testMap))
 			{
 				return getAcc(testMap)
 			}
 		}
 	}
-	// test for jumps that should be nops
-	for (x in inputMap.indices)
-	{
-		if (inputMap[x].first == "jmp")
-		{
-			val before: List<Pair<String, Int>> = if (x > 0)
-			{
-				inputMap.subList(0, x)
-			} else
-			{
-				listOf()
-			}
-			val after: List<Pair<String, Int>> = if (x < inputMap.size)
-			{
-				inputMap.subList(x + 1, inputMap.size)
-			} else
-			{
-				listOf()
-			}
-			val testMap = before.plus(Pair("nop", inputMap[x].second))
-				.plus(after)
-			if (doesHalt(testMap))
-			{
-				return getAcc(testMap)
-			}
-		}
-	}
-
 	return 0
 }
 
@@ -133,4 +89,25 @@ fun doesHalt(inputMap: List<Pair<String, Int>>): Boolean
 		}
 	}
 	return index >= inputMap.size
+}
+
+fun flipIndex(original: List<Pair<String, Int>>, index: Int): List<Pair<String, Int>>
+{
+	val before: List<Pair<String, Int>> = when
+	{
+		index > 0 -> original.subList(0, index)
+		else -> listOf()
+	}
+	val after: List<Pair<String, Int>> = when
+	{
+		index < original.size -> original.subList(index + 1, original.size)
+		else -> listOf()
+	}
+	val current = when (original[index].first)
+	{
+		"nop" -> Pair("jmp", original[index].second)
+		"jmp" -> Pair("nop", original[index].second)
+		else -> original[index]
+	}
+	return before.plus(current).plus(after)
 }
