@@ -10,19 +10,13 @@ fun day8(): Pair<Number, Number>
 
 fun day8part1(list: List<String>): Number
 {
-	val inputMap = list.map { a ->
-		a.split(" ")[0] to mapOf('-' to -1, '+' to 1)[a.split(" ")[1][0]]!! * a.split(' ')[1].drop(1)
-			.toInt()
-	}
+	val inputMap = list.map { a -> a.split(" ")[0] to a.split(" ")[1].toInt() }
 	return getAcc(inputMap)
 }
 
 fun day8part2(list: List<String>): Number
 {
-	val inputMap = list.map { a ->
-		a.split(" ")[0] to mapOf('-' to -1, '+' to 1)[a.split(" ")[1][0]]!! * a.split(' ')[1].drop(1)
-			.toInt()
-	}
+	val inputMap = list.map { a -> a.split(" ")[0] to a.split(" ")[1].toInt() }
 	for (x in inputMap.indices)
 	{
 		if (doesHalt(flipIndex(inputMap, x)))
