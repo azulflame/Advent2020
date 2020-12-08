@@ -37,7 +37,7 @@ fun day8part2(list: List<String>): Number
 			}
 			val after: List<Pair<String, Int>> = if (x < inputMap.size)
 			{
-				inputMap.subList(x+1, inputMap.size)
+				inputMap.subList(x + 1, inputMap.size)
 			} else
 			{
 				listOf()
@@ -64,7 +64,7 @@ fun day8part2(list: List<String>): Number
 			}
 			val after: List<Pair<String, Int>> = if (x < inputMap.size)
 			{
-				inputMap.subList(x+1, inputMap.size)
+				inputMap.subList(x + 1, inputMap.size)
 			} else
 			{
 				listOf()
@@ -120,20 +120,15 @@ fun doesHalt(inputMap: List<Pair<String, Int>>): Boolean
 	{
 		when (inputMap[index].first)
 		{
-			"nop" ->
-			{
-				hashMap.add(index)
-				index++
-			}
-			"acc" ->
-			{
-				hashMap.add(index)
-				index++
-			}
 			"jmp" ->
 			{
 				hashMap.add(index)
 				index += inputMap[index].second
+			}
+			else ->
+			{
+				hashMap.add(index)
+				index++
 			}
 		}
 	}
