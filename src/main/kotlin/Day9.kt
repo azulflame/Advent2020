@@ -7,8 +7,9 @@ import java.lang.Integer.max
  */
 fun day9(): Pair<Number, Number>
 {
-	val t = day9part1(ListHolder.day9)
-	return Pair(t, day9part2(ListHolder.day9, t))
+	val a = day9part1(ListHolder.day9)
+	val b = day9part2(ListHolder.day9, a)
+	return Pair(a, b)
 }
 
 fun day9part1(list: List<String>): Number
@@ -25,6 +26,21 @@ fun day9part1(list: List<String>): Number
 	return 0
 }
 
+fun isValid(tape: List<Long>, index: Int, preamble: Int): Boolean
+{
+	val tempList = tape.subList(max(0, index - preamble), index)
+	val set: HashSet<Long> = HashSet()
+	for (a in tempList)
+	{
+		if (set.contains(tape[index] - a))
+		{
+			return true
+		}
+		set.add(a)
+	}
+	return false
+}
+
 fun day9part2(list: List<String>, p1ans: Number): Number
 {
 	val nums = list.map { it.toLong() }
@@ -39,23 +55,4 @@ fun day9part2(list: List<String>, p1ans: Number): Number
 		}
 	}
 	return 0
-}
-
-fun isValid(tape: List<Long>, index: Int, preamble: Int): Boolean
-{
-	val tempList = tape.subList(max(0, index - preamble), index)
-	for (a in tempList.indices)
-	{
-		for (b in tempList.indices)
-		{
-			if (a != b)
-			{
-				if (tempList[a] + tempList[b] == tape[index])
-				{
-					return true
-				}
-			}
-		}
-	}
-	return false
 }
