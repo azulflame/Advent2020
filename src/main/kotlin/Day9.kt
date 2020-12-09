@@ -1,18 +1,61 @@
 package me.toddbensmiller.advent
 
+import java.lang.Integer.max
+
 /*
  * Created by Todd on 12/8/2020.
  */
 fun day9(): Pair<Number, Number>
 {
-	return Pair(day9part1(ListHolder.test), day9part2(ListHolder.day9))
+	val t = day9part1(ListHolder.day9)
+	return Pair(t, day9part2(ListHolder.day9, t))
 }
+
 fun day9part1(list: List<String>): Number
 {
+	val input = list.map { it.toLong() }
+	val preamble = 25
+	for (x in input.indices.minus(0 until preamble))
+	{
+		if (!isValid(input, x, preamble))
+		{
+			return input[x]
+		}
+	}
 	return 0
 }
 
-fun day9part2(list: List<String>): Number
+fun day9part2(list: List<String>, p1ans: Number): Number
 {
+	val nums = list.map { it.toLong() }
+	for (start in nums.indices)
+	{
+		for (end in start + 1 until nums.size)
+		{
+			if (nums.subList(start, end).sumOf { it } == p1ans)
+			{
+				return nums.subList(start, end).minOf { it } + nums.subList(start, end).maxOf { it }
+			}
+		}
+	}
 	return 0
+}
+
+fun isValid(tape: List<Long>, index: Int, preamble: Int): Boolean
+{
+	val tempList = tape.subList(max(0, index - preamble), index)
+	for (a in tempList.indices)
+	{
+		for (b in tempList.indices)
+		{
+			if (a != b)
+			{
+				if (tempList[a] + tempList[b] == tape[index])
+				{
+					return true
+				}
+			}
+		}
+	}
+	return false
 }
