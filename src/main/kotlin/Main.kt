@@ -21,6 +21,7 @@ fun runAll(): List<Pair<Number, Number>>
 		day5(),
 		day6(),
 		day7(),
-		day8()
+		day8(),
+		day9()
 	)
 }
