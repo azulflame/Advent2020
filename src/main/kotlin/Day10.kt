@@ -1,7 +1,5 @@
 package me.toddbensmiller.advent
 
-import kotlin.system.measureNanoTime
-
 /*
  * Created by Todd on 12/9/2020.
  */
@@ -24,11 +22,7 @@ fun day10part1(input: List<String>): Number
 
 fun day10part2(input: List<String>): Number
 {
-	val t: Number
-	println(measureNanoTime {
-		t = check10Cache(input.map { it.toInt() }.plus(input.map { it.toInt() }.maxOf { it } + 3), 0)
-	})
-	return t
+	return check10Cache(input.map { it.toInt() }.plus(input.map { it.toInt() }.maxOf { it } + 3), 0)
 }
 
 fun check10Cache(input: List<Int>, start: Int): Long
