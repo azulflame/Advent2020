@@ -93,8 +93,9 @@ fun day12part2(list: List<String>): Number
 			'E' -> waypointH += instruction.second
 			'S' -> waypointV -= instruction.second
 			'W' -> waypointH -= instruction.second
-			'L' ->	{
-				for(x in 0 until (instruction.second/90))
+			'L' ->
+			{
+				for (x in 0 until (instruction.second / 90))
 				{
 					val tx = -waypointV
 					val ty = waypointH
@@ -102,14 +103,15 @@ fun day12part2(list: List<String>): Number
 					waypointV = ty
 				}
 			}
-			'R' -> for(x in 0 until (instruction.second/90))
+			'R' -> for (x in 0 until (instruction.second / 90))
 			{
 				val tx = waypointV
 				val ty = -waypointH
 				waypointH = tx
 				waypointV = ty
 			}
-			'F' -> {
+			'F' ->
+			{
 				hpos += instruction.second * waypointH
 				vpos += instruction.second * waypointV
 			}
