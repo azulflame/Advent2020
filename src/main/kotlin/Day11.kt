@@ -20,11 +20,50 @@ enum class Seats
 	OCCUPIED_TEMP,
 }
 
+fun getVisibleSeatCoordinates(input: List<Array<Seats>>, x: Int, y: Int, immediateOnly: Boolean): List<Pair<Int,Int>>
+{
+	val visibleSeats: MutableList<Pair<Int,Int>> = mutableListOf()
+	for(xdir in -1..1)
+	{
+		for(ydir in -1..1)
+		{
+			if(xdir != 0 || ydir != 0) // exclude the own cell
+			{
+				var tx = x+xdir
+				var ty = y+ydir
+				if(immediateOnly)
+				{
+					if(tx >= 0 && tx < input.size && ty >= 0 && ty < input[0].size && input[tx][ty] != Seats.FLOOR)
+					{
+						visibleSeats.add(Pair(tx,ty))
+					}
+				}
+				else
+				{
+					while(tx >= 0 && tx < input.size && ty >= 0 && ty < input[0].size)
+					{
+						if(input[tx][ty] != Seats.FLOOR)
+						{
+							visibleSeats.add(Pair(tx,ty))
+							break
+						}
+						tx += xdir
+						ty += ydir
+					}
+				}
+			}
+		}
+	}
+	return visibleSeats.toList() // to unmutable list
+}
+
 fun day11part1(input: List<String>): Number
 {
 	var anyChanged = true
 	val seatMap = mapOf('.' to Seats.FLOOR, '#' to Seats.OCCUPIED, 'L' to Seats.EMPTY)
 	val inMap = input.map { a -> a.toCharArray().map { seatMap[it]!! }.toTypedArray() }
+	val sightMap =
+		inMap.mapIndexed { ai, a -> a.mapIndexed { bi, _ -> getVisibleSeatCoordinates(inMap, ai, bi, true) } }
 	while (anyChanged)
 	{
 		anyChanged = false
@@ -32,12 +71,14 @@ fun day11part1(input: List<String>): Number
 		{
 			for (y in inMap[0].indices)
 			{
-				if (inMap[x][y] == Seats.OCCUPIED && getCellCount(inMap, x, y) >= 4)
+				if (inMap[x][y] == Seats.OCCUPIED && sightMap[x][y].filter { a -> inMap[a.first][a.second] == Seats.OCCUPIED || inMap[a.first][a.second] == Seats.EMPTY_TEMP }
+						.count() >= 4)
 				{
 					inMap[x][y] = Seats.EMPTY_TEMP
 					anyChanged = true
 				}
-				if (inMap[x][y] == Seats.EMPTY && getCellCount(inMap, x, y) == 0)
+				if (inMap[x][y] == Seats.EMPTY && sightMap[x][y].filter { a -> inMap[a.first][a.second] == Seats.OCCUPIED || inMap[a.first][a.second] == Seats.EMPTY_TEMP }
+						.count() == 0)
 				{
 					inMap[x][y] = Seats.OCCUPIED_TEMP
 					anyChanged = true
@@ -62,244 +103,14 @@ fun day11part1(input: List<String>): Number
 	return inMap.sumBy { x -> x.count { y -> y == Seats.OCCUPIED } }
 }
 
-fun getCellCount(input: List<Array<Seats>>, x: Int, y: Int): Int
-{
-	val xunder = x > 0
-	val xover = x < input.size - 1
-	val yunder = y > 0
-	val yover = y < input[0].size - 1
-
-	var count = 0
-	if (xunder && yunder && (input[x - 1][y - 1] == Seats.OCCUPIED || input[x - 1][y - 1] == Seats.EMPTY_TEMP))
-	{
-		count++
-	}
-	if (xunder && (input[x - 1][y] == Seats.OCCUPIED || input[x - 1][y] == Seats.EMPTY_TEMP))
-	{
-		count++
-	}
-	if (xunder && yover && (input[x - 1][y + 1] == Seats.OCCUPIED || input[x - 1][y + 1] == Seats.EMPTY_TEMP))
-	{
-		count++
-	}
-	if (yunder && (input[x][y - 1] == Seats.OCCUPIED || input[x][y - 1] == Seats.EMPTY_TEMP))
-	{
-		count++
-	}
-	if (yover && (input[x][y + 1] == Seats.OCCUPIED || input[x][y + 1] == Seats.EMPTY_TEMP))
-	{
-		count++
-	}
-	if (xover && yunder && (input[x + 1][y - 1] == Seats.OCCUPIED || input[x + 1][y - 1] == Seats.EMPTY_TEMP))
-	{
-		count++
-	}
-	if (xover && (input[x + 1][y] == Seats.OCCUPIED || input[x + 1][y] == Seats.EMPTY_TEMP))
-	{
-		count++
-	}
-	if (xover && yover && (input[x + 1][y + 1] == Seats.OCCUPIED || input[x + 1][y + 1] == Seats.EMPTY_TEMP))
-	{
-		count++
-	}
-	return count
-}
-
-fun getLongCellCount(input: List<Array<Seats>>, x: Int, y: Int): Int
-{
-	var count = 0
-// case upper left
-	var xmod = -1
-	var ymod = -1
-	while (x + xmod >= 0 && y + ymod >= 0)
-	{
-		when (input[x + xmod][y + ymod])
-		{
-			Seats.EMPTY_TEMP ->
-			{
-				count++; break
-			}
-			Seats.OCCUPIED ->
-			{
-				count++; break
-			}
-			Seats.OCCUPIED_TEMP -> break
-			Seats.EMPTY -> break
-			else ->
-			{
-				xmod--; ymod--
-			}
-		}
-	}
-	// straight up
-	xmod = 0
-	ymod = -1
-	while (y + ymod >= 0)
-	{
-		when (input[x + xmod][y + ymod])
-		{
-			Seats.EMPTY_TEMP ->
-			{
-				count++; break
-			}
-			Seats.OCCUPIED ->
-			{
-				count++; break
-			}
-			Seats.OCCUPIED_TEMP -> break
-			Seats.EMPTY -> break
-			else ->
-			{
-				ymod--
-			}
-		}
-	}
-	// upper right
-	xmod = 1
-	ymod = -1
-	while (x + xmod < input.size && y + ymod >= 0)
-	{
-		when (input[x + xmod][y + ymod])
-		{
-			Seats.EMPTY_TEMP ->
-			{
-				count++; break
-			}
-			Seats.OCCUPIED ->
-			{
-				count++; break
-			}
-			Seats.OCCUPIED_TEMP -> break
-			Seats.EMPTY -> break
-			else ->
-			{
-				xmod++; ymod--
-			}
-		}
-	}
-	// left
-	xmod = -1
-	ymod = 0
-	while (x + xmod >= 0)
-	{
-		when (input[x + xmod][y + ymod])
-		{
-			Seats.EMPTY_TEMP ->
-			{
-				count++; break
-			}
-			Seats.OCCUPIED ->
-			{
-				count++; break
-			}
-			Seats.OCCUPIED_TEMP -> break
-			Seats.EMPTY -> break
-			else ->
-			{
-				xmod--
-			}
-		}
-	}
-	// right
-	xmod = 1
-	ymod = 0
-	while (x + xmod < input.size)
-	{
-		when (input[x + xmod][y + ymod])
-		{
-			Seats.EMPTY_TEMP ->
-			{
-				count++; break
-			}
-			Seats.OCCUPIED ->
-			{
-				count++; break
-			}
-			Seats.OCCUPIED_TEMP -> break
-			Seats.EMPTY -> break
-			else ->
-			{
-				xmod++
-			}
-		}
-	}
-	// lower left
-	xmod = -1
-	ymod = 1
-	while (x + xmod >= 0 && y + ymod < input[0].size)
-	{
-		when (input[x + xmod][y + ymod])
-		{
-			Seats.EMPTY_TEMP ->
-			{
-				count++; break
-			}
-			Seats.OCCUPIED ->
-			{
-				count++; break
-			}
-			Seats.OCCUPIED_TEMP -> break
-			Seats.EMPTY -> break
-			else ->
-			{
-				xmod--; ymod++
-			}
-		}
-	}
-	// straight down
-	xmod = 0
-	ymod = 1
-	while (y + ymod < input[0].size)
-	{
-		when (input[x + xmod][y + ymod])
-		{
-			Seats.EMPTY_TEMP ->
-			{
-				count++; break
-			}
-			Seats.OCCUPIED ->
-			{
-				count++; break
-			}
-			Seats.OCCUPIED_TEMP -> break
-			Seats.EMPTY -> break
-			else ->
-			{
-				ymod++
-			}
-		}
-	}
-	// lower left
-	xmod = 1
-	ymod = 1
-	while (x + xmod < input.size && y + ymod < input[0].size)
-	{
-		when (input[x + xmod][y + ymod])
-		{
-			Seats.EMPTY_TEMP ->
-			{
-				count++; break
-			}
-			Seats.OCCUPIED ->
-			{
-				count++; break
-			}
-			Seats.OCCUPIED_TEMP -> break
-			Seats.EMPTY -> break
-			else ->
-			{
-				xmod++; ymod++
-			}
-		}
-	}
-	return count
-}
-
 fun day11part2(input: List<String>): Number
 {
+
 	var anyChanged = true
 	val seatMap = mapOf('.' to Seats.FLOOR, '#' to Seats.OCCUPIED, 'L' to Seats.EMPTY)
 	val inMap = input.map { a -> a.toCharArray().map { seatMap[it]!! }.toTypedArray() }
+	val sightMap =
+		inMap.mapIndexed { ai, a -> a.mapIndexed { bi, _ -> getVisibleSeatCoordinates(inMap, ai, bi, false) } }
 	while (anyChanged)
 	{
 		anyChanged = false
@@ -307,12 +118,14 @@ fun day11part2(input: List<String>): Number
 		{
 			for (y in inMap[0].indices)
 			{
-				if (inMap[x][y] == Seats.OCCUPIED && getLongCellCount(inMap, x, y) >= 5)
+				if (inMap[x][y] == Seats.OCCUPIED && sightMap[x][y].filter { a -> inMap[a.first][a.second] == Seats.OCCUPIED || inMap[a.first][a.second] == Seats.EMPTY_TEMP }
+						.count() >= 5)
 				{
 					inMap[x][y] = Seats.EMPTY_TEMP
 					anyChanged = true
 				}
-				if (inMap[x][y] == Seats.EMPTY && getLongCellCount(inMap, x, y) == 0)
+				if (inMap[x][y] == Seats.EMPTY && sightMap[x][y].filter { a -> inMap[a.first][a.second] == Seats.OCCUPIED || inMap[a.first][a.second] == Seats.EMPTY_TEMP }
+						.count() == 0)
 				{
 					inMap[x][y] = Seats.OCCUPIED_TEMP
 					anyChanged = true
