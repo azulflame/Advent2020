@@ -3,6 +3,9 @@ package me.toddbensmiller.advent
 
 fun main(args: Array<String>)
 {
+	println( ListHolder.day14.filter { x -> x.count { y -> y == 'X'} == 9}.size)
+
+
 	runAll().forEachIndexed { i, x ->
 		println("Day ${i+1}")
 		println("\tPart 1: ${x.first}")
@@ -27,6 +30,7 @@ fun runAll(): List<Pair<Number, Number>>
 		day11(),
 		day12(),
 		day13(),
-		day14()
+		day14(),
+		day15()
 	)
 }
