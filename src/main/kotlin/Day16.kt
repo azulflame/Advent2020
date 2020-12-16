@@ -33,10 +33,6 @@ fun day16part1(input: List<String>): Number
 			}
 		}
 	}
-
-
-
-
 	return invalidValues.sum()
 }
 
@@ -51,13 +47,13 @@ fun day16part2(input: List<String>): Number
 	val ranges: HashMap<String, HashSet<Int>> = HashMap()
 	val possibleRanges = HashMap<Int, MutableList<String>>()
 
-
 	// populate the list of all values to later identify invalid tickets
 	fieldChunk.forEach { line ->
 		line.replace(" or ", "|").filter { it in charList }.split('|').map { x -> x.split('-') }.forEach { range ->
 			potentialRange.addAll(range[0].toInt()..range[1].toInt())
 		}
 	}
+
 	// build the individual, named ranges
 	fieldChunk.forEach { line ->
 		val name = line.split(':').first()
@@ -67,6 +63,7 @@ fun day16part2(input: List<String>): Number
 		}
 		ranges[name] = tempSet
 	}
+
 	// add all tickets that aren't invalid
 	nearbyTicketChunk.map { a -> a.split(',').map { b -> b.toInt() } }.forEach { c ->
 		if (isValidTicket(potentialRange, c))
@@ -91,6 +88,7 @@ fun day16part2(input: List<String>): Number
 			}
 		}
 	}
+
 	// remove range names until 1 of each remains
 	var changeMade = true
 	while (changeMade)
