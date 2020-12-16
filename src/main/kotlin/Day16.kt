@@ -98,7 +98,8 @@ fun day16part2(input: List<String>): Number
 		changeMade = false
 		for (key in possibleRanges.keys.filter { x -> possibleRanges[x]!!.size == 1 })
 		{
-			for (targetKey in possibleRanges.keys.filter { x -> possibleRanges[x]!!.size > 1 })
+			for (targetKey in possibleRanges.keys.filter { x -> possibleRanges[x]!!.contains(possibleRanges[key]!!.first())
+					&& possibleRanges[x]!!.size > 1 })
 			{
 				changeMade = true
 				possibleRanges[targetKey]!!.remove(possibleRanges[key]!!.first())
