@@ -1,7 +1,7 @@
 package me.toddbensmiller.advent
 
 
-fun main(args: Array<String>)
+fun main()
 {
 	runAll().forEachIndexed { i, x ->
 		println("Day ${i+1}")
