@@ -6,7 +6,7 @@ package me.toddbensmiller.advent
 fun day17(): Pair<Number, Number>
 {
 	return Pair(
-		day17part1(ListHolder.day17),
+		day17part1(ListHolder.test),
 		day17part2(ListHolder.day17)
 	)
 }
@@ -32,7 +32,7 @@ fun day17part1(input: List<String>): Number
 	val zmax = 2 * zoffset + 1
 	val xmax = parsed.size + 2 * xoffset
 	val ymax = parsed[0].size + 2 * yoffset
-	var grid = Array(xmax) { Array(ymax) { Array(zmax) { State.INACTIVE } } }
+	val grid = Array(xmax) { Array(ymax) { Array(zmax) { State.INACTIVE } } }
 	for (x in parsed.indices)
 	{
 		for (y in parsed[0].indices)
@@ -70,19 +70,19 @@ fun day17part1(input: List<String>): Number
 				}
 			}
 		}
-		for(x in grid.indices)
+		for (x in grid.indices)
 		{
-			for(y in grid[0].indices)
+			for (y in grid[0].indices)
 			{
-				for(z in grid[0][0].indices)
+				for (z in grid[0][0].indices)
 				{
-						when(grid[x][y][z])
-						{
-							State.INACTIVE_TEMP -> grid[x][y][z] = State.INACTIVE
-							State.ACTIVE_TEMP -> grid[x][y][z] = State.ACTIVE
-						}
+					when (grid[x][y][z])
+					{
+						State.INACTIVE_TEMP -> grid[x][y][z] = State.INACTIVE
+						State.ACTIVE_TEMP -> grid[x][y][z] = State.ACTIVE
 					}
 				}
+			}
 		}
 	}
 	return grid.sumBy { x -> x.sumOf { y -> y.count { z -> z == State.ACTIVE } } }
@@ -107,8 +107,7 @@ fun day17part2(input: List<String>): Number
 	val zmax = 2 * zoffset + 1
 	val xmax = parsed.size + 2 * xoffset
 	val ymax = parsed[0].size + 2 * yoffset
-	val wmax = zmax
-	var grid = Array(xmax) { Array(ymax) { Array(zmax) { Array(wmax) { State.INACTIVE } } } }
+	val grid = Array(xmax) { Array(ymax) { Array(zmax) { Array(zmax) { State.INACTIVE } } } }
 	for (x in parsed.indices)
 	{
 		for (y in parsed[0].indices)
@@ -149,15 +148,15 @@ fun day17part2(input: List<String>): Number
 				}
 			}
 		}
-		for(x in grid.indices)
+		for (x in grid.indices)
 		{
-			for(y in grid[0].indices)
+			for (y in grid[0].indices)
 			{
-				for(z in grid[0][0].indices)
+				for (z in grid[0][0].indices)
 				{
-					for(w in grid[0][0][0].indices)
+					for (w in grid[0][0][0].indices)
 					{
-						when(grid[x][y][z][w])
+						when (grid[x][y][z][w])
 						{
 							State.INACTIVE_TEMP -> grid[x][y][z][w] = State.INACTIVE
 							State.ACTIVE_TEMP -> grid[x][y][z][w] = State.ACTIVE
@@ -188,6 +187,7 @@ fun neighborCount(grid: Array<Array<Array<State>>>, x: Int, y: Int, z: Int): Int
 	}
 	return count
 }
+
 fun neighborCount(grid: Array<Array<Array<Array<State>>>>, x: Int, y: Int, z: Int, w: Int): Int
 {
 	var count = 0
@@ -197,9 +197,9 @@ fun neighborCount(grid: Array<Array<Array<Array<State>>>>, x: Int, y: Int, z: In
 		{
 			for (zs in -1..1)
 			{
-				for(ws in -1..1)
+				for (ws in -1..1)
 				{
-					if ((ys != 0 || xs != 0 || zs != 0 || ws != 0) && (grid[x + xs][y + ys][z + zs][w+ws] == State.ACTIVE || grid[x + xs][y + ys][z + zs][w+ws] == State.INACTIVE_TEMP))
+					if ((ys != 0 || xs != 0 || zs != 0 || ws != 0) && (grid[x + xs][y + ys][z + zs][w + ws] == State.ACTIVE || grid[x + xs][y + ys][z + zs][w + ws] == State.INACTIVE_TEMP))
 					{
 						count++
 					}
